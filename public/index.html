@@ -1,15 +1,55 @@
+<link rel="stylesheet" href="css/styles.css">
+<section class="task-section">
+    <h2>View Tasks</h2>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Task Manager</title>
-    <meta charset="UTF-8">
-</head>
-<body>
+    <!-- Search -->
+    <div class="task-controls">
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search tasks by title..."
+        >
 
-    <h1>Welcome to Task Manager</h1>
+        <!-- Category filter -->
+        <select id="categoryFilter">
+            <option value="">All Categories</option>
+            <option value="School">School</option>
+            <option value="Personal">Personal</option>
+            <option value="Work">Work</option>
+            <option value="Project">Project</option>
+        </select>
 
-    <p>Manage your daily tasks in one place.</p>
+        <!-- Priority filter -->
+        <select id="priorityFilter">
+            <option value="">All Priorities</option>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+        </select>
 
-</body>
-</html>
+        <!-- Status filter -->
+        <select id="statusFilter">
+            <option value="">All Statuses</option>
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+        </select>
+
+        <!-- Sorting -->
+        <select id="sortOrder">
+            <option value="">Default Order</option>
+            <option value="asc">Deadline: Earliest First</option>
+            <option value="desc">Deadline: Latest First</option>
+        </select>
+    </div>
+
+    <button id="resetFilters">Reset Filters</button>
+
+    <!-- Results message -->
+    <p id="resultMessage"></p>
+
+    <!-- Task display -->
+    <div id="taskList" class="task-list"></div>
+</section>
+
+<script src="js/read-task.js"></script>
