@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 
+const { addTask } = require('./utils/AddTaskUtil');
 const { getTasks } = require('./utils/ReadTaskUtil');
 const { updateTask } = require('./utils/UpdateTaskUtil');
 const { deleteTask } = require('./utils/DeleteTaskUtil');
@@ -9,6 +10,8 @@ const PORT = 3000;
 
 app.use(express.json());
 app.use(express.static('public'));
+
+app.post('/add-task', addTask);
 
 // Display the main page
 app.get('/', (req, res) => {
