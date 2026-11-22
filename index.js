@@ -2,6 +2,9 @@ const express = require('express');
 const app = express();
 
 const { addTask } = require('./utils/AddTaskUtil');
+const { getTasks } = require('./utils/ReadTaskUtil');
+const { updateTask } = require('./utils/UpdateTaskUtil');
+const { deleteTask } = require('./utils/DeleteTaskUtil');
 
 const PORT = 3000;
 
@@ -10,8 +13,35 @@ app.use(express.static('public'));
 
 app.post('/add-task', addTask);
 
+// Display the main page
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
+});
+
+// Update Task route
+app.put('/update-task/:id', updateTask);
+
+// Delete Task route
+app.delete('/delete-task/:id', deleteTask);
+
+// Read tasks
+app.get('/api/tasks', (req, res) => {
+    try {
+        const tasks = getTasks(req.query);
+
+        res.status(200).json({
+            success: true,
+            count: tasks.length,
+            tasks: tasks
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(error.statusCode || 500).json({
+            success: false,
+            message: error.message
+        });
+    }
 });
 
 app.listen(PORT, () => {

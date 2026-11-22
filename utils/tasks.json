@@ -1,1 +1,34 @@
 []
+{
+  "tasks": [
+    {
+      "id": "Task001",
+      "title": "Complete DVOPS Assignment",
+      "description": "Finish the project report",
+      "category": "School",
+      "priority": "High",
+      "status": "Pending",
+      "deadline": "2026-11-22"
+    },
+    {
+      "id": "Task002",
+      "title": "Study for Programming Test",
+      "description": "Revise JavaScript and Node.js",
+      "category": "School",
+      "priority": "Medium",
+      "status": "In Progress",
+      "deadline": "2026-11-25"
+    },
+    {
+      "id": "Task003",
+      "title": "Buy Groceries",
+      "description": "Purchase food for the week",
+      "category": "Personal",
+      "priority": "Low",
+      "status": "Completed",
+      "deadline": "2026-11-20"
+    }
+  ]
+}
+[]
+
