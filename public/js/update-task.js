@@ -1,43 +1,90 @@
 
 function updateTask(id) {
-    var response = "";
 
-    // Create a JSON object from the form fields
-    var jsonData = new Object();
+    // Get task information from the form
+    var jsonData = {};
 
-    jsonData.title = document.getElementById("title").value.trim();
-    jsonData.description = document.getElementById("description").value.trim();
-    jsonData.priority = document.getElementById("priority").value;
-    jsonData.status = document.getElementById("status").value;
-    jsonData.deadline = document.getElementById("deadline").value;
+    jsonData.title = document.getElementById("updateTitle").value.trim();
+    jsonData.description = document.getElementById("updateDescription").value.trim();
+    jsonData.priority = document.getElementById("updatePriority").value;
+    jsonData.status = document.getElementById("updateStatus").value;
+    jsonData.deadline = document.getElementById("updateDeadline").value;
 
-    // Basic validation
-    if (id == "" || isNaN(id) || Number(id) <= 0 || !Number.isInteger(Number(id))) {
+    // Validate Task ID
+    if (id.trim() === "") {
         alert("Please enter a valid Task ID!");
         return;
     }
 
-    if (jsonData.title == "" || jsonData.description == "" ||
-        jsonData.priority == "" || jsonData.status == "" ||
-        jsonData.deadline == "") {
+    // Validate required fields
+    if (
+        jsonData.title === "" ||
+        jsonData.description === "" ||
+        jsonData.priority === "" ||
+        jsonData.status === "" ||
+        jsonData.deadline === ""
+    ) {
         alert("All fields are required!");
         return;
     }
 
-    // Configure the request as PUT to update the task
+    // Validate priority
+    if (
+        jsonData.priority !== "Low" &&
+        jsonData.priority !== "Medium" &&
+        jsonData.priority !== "High"
+    ) {
+        alert("Please select a valid priority!");
+        return;
+    }
+
+    // Validate status
+    if (
+        jsonData.status !== "Pending" &&
+        jsonData.status !== "In Progress" &&
+        jsonData.status !== "Completed"
+    ) {
+        alert("Please select a valid status!");
+        return;
+    }
+
+    // Validate deadline
+    var datePattern = /^\d{4}-\d{2}-\d{2}$/;
+
+    if (!datePattern.test(jsonData.deadline)) {
+        alert("Please enter a valid deadline!");
+        return;
+    }
+
+    // Send PUT request
     var request = new XMLHttpRequest();
 
-    request.open("PUT", "/update-task/" + id, true);
+    request.open("PUT", "/update-task/" + encodeURIComponent(id.trim()), true);
+
     request.setRequestHeader("Content-Type", "application/json");
 
     request.onload = function () {
-        response = JSON.parse(request.responseText);
+
+        var response;
+
+        try {
+            response = JSON.parse(request.responseText);
+        } catch (error) {
+            alert("Invalid server response!");
+            return;
+        }
 
         if (request.status === 200) {
-            alert(response.message);
 
-            // Clear form fields after successful update
+            alert(response.message || "Task updated successfully!");
+
+            // Clear form fields
             document.getElementById("updateTaskForm").reset();
+
+            // Refresh task list
+            if (typeof loadTasks === "function") {
+                loadTasks();
+            }
 
         } else {
             alert(response.message || "Unable to update task!");
@@ -48,6 +95,5 @@ function updateTask(id) {
         alert("Unable to connect to the server!");
     };
 
-    // Send the JSON data to the backend
     request.send(JSON.stringify(jsonData));
 }

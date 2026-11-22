@@ -1,3 +1,4 @@
+
 const searchInput = document.getElementById('searchInput');
 const categoryFilter = document.getElementById('categoryFilter');
 const priorityFilter = document.getElementById('priorityFilter');
@@ -45,7 +46,6 @@ async function loadTasks() {
         }
 
         const response = await fetch(`/api/tasks?${params.toString()}`);
-
         const data = await response.json();
 
         if (!response.ok) {
@@ -67,7 +67,9 @@ function displayTasks(tasks) {
     resultMessage.textContent = `${tasks.length} task(s) found`;
 
     if (tasks.length === 0) {
-        taskList.textContent = 'No matching tasks found.';
+        taskList.innerHTML = `
+            <p class="no-tasks">No matching tasks found.</p>
+        `;
         return;
     }
 
@@ -76,12 +78,39 @@ function displayTasks(tasks) {
         taskCard.className = 'task-card';
 
         taskCard.innerHTML = `
-            <h3>${escapeHTML(task.title)}</h3>
-            <p>${escapeHTML(task.description)}</p>
-            <p>Category: ${escapeHTML(task.category)}</p>
-            <p>Priority: ${escapeHTML(task.priority)}</p>
-            <p>Status: ${escapeHTML(task.status)}</p>
-            <p>Deadline: ${escapeHTML(task.deadline)}</p>
+            <div class="task-card-header">
+                <h3>${escapeHTML(task.title)}</h3>
+
+                <span class="task-id">
+                    ${escapeHTML(task.id)}
+                </span>
+            </div>
+
+            <p class="task-description">
+                ${escapeHTML(task.description)}
+            </p>
+
+            <div class="task-details">
+                <p>
+                    <strong>Category:</strong>
+                    ${escapeHTML(task.category)}
+                </p>
+
+                <p>
+                    <strong>Priority:</strong>
+                    ${escapeHTML(task.priority)}
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+                    ${escapeHTML(task.status)}
+                </p>
+
+                <p>
+                    <strong>Deadline:</strong>
+                    ${escapeHTML(task.deadline)}
+                </p>
+            </div>
         `;
 
         taskList.appendChild(taskCard);

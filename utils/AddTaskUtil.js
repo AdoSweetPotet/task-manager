@@ -1,3 +1,4 @@
+
 const fs = require('fs').promises;
 const path = require('path');
 
@@ -6,21 +7,23 @@ const TEMPLATE_FILE = path.join('utils', 'tasks.template.json');
 
 async function addTask(req, res) {
     try {
-        // Get task information from the request
-        const { title, description, priority, deadline } = req.body;
+        // Get task information from request
+        const { title, description, category, priority, deadline } = req.body;
 
         // Validate required fields
-        if (title == "" || description == "" ||
-            priority == "" || deadline == "") {
+        if (
+            !title || !title.trim() ||
+            !description || !description.trim() ||
+            !priority ||
+            !deadline
+        ) {
             return res.status(400).json({
                 message: 'All fields are required!'
             });
         }
 
         // Validate priority
-        if (priority != 'Low' &&
-            priority != 'Medium' &&
-            priority != 'High') {
+        if (!['Low', 'Medium', 'High'].includes(priority)) {
             return res.status(400).json({
                 message: 'Invalid priority!'
             });
@@ -35,52 +38,72 @@ async function addTask(req, res) {
             });
         }
 
-        // Generate task ID
-        const timestamp = new Date().getTime();
-        const random = Math.floor(Math.random() * 1000);
-        const taskId = timestamp + "" + random.toString().padStart(3, '0');
-
-        // Create new task
-        const newTask = {
-            id: taskId,
-            title: title,
-            description: description,
-            priority: priority,
-            status: 'Pending',
-            deadline: deadline
-        };
-
-        let tasks = [];
+        // Read existing JSON data
+        let taskData;
 
         try {
-            // Try reading the existing tasks.json
             const data = await fs.readFile(TASKS_FILE, 'utf8');
-            tasks = JSON.parse(data);
+            taskData = JSON.parse(data);
 
         } catch (err) {
             if (err.code === 'ENOENT') {
-                // Read template if tasks.json does not exist
-                const templateData = await fs.readFile(TEMPLATE_FILE, 'utf8');
-                tasks = JSON.parse(templateData);
+                const templateData = await fs.readFile(
+                    TEMPLATE_FILE,
+                    'utf8'
+                );
+
+                taskData = JSON.parse(templateData);
             } else {
                 throw err;
             }
         }
 
-        // Add new task and save to file
-        tasks.push(newTask);
+        // Check JSON structure
+        if (!taskData || !Array.isArray(taskData.tasks)) {
+            return res.status(500).json({
+                message: 'Invalid tasks JSON structure!'
+            });
+        }
 
+        // Generate the next Task ID
+        const highestId = taskData.tasks.reduce((max, task) => {
+            const match = String(task.id).match(/^Task(\d+)$/);
+
+            if (match) {
+                return Math.max(max, Number(match[1]));
+            }
+
+            return max;
+        }, 0);
+
+        const taskId = 'Task' + String(highestId + 1).padStart(3, '0');
+
+        // Create new task
+        const newTask = {
+            id: taskId,
+            title: title.trim(),
+            description: description.trim(),
+            category: category || '',
+            priority: priority,
+            status: 'Pending',
+            deadline: deadline
+        };
+
+        // Add task to the existing tasks array
+        taskData.tasks.push(newTask);
+
+        // Save the complete JSON object
         await fs.writeFile(
             TASKS_FILE,
-            JSON.stringify(tasks, null, 2),
+            JSON.stringify(taskData, null, 2),
             'utf8'
         );
 
         // Return successful response
-        return res.status(201).json(tasks);
+        return res.status(201).json(taskData);
 
     } catch (error) {
-        console.error(error);
+        console.error('Add Task Error:', error);
 
         return res.status(500).json({
             message: error.message

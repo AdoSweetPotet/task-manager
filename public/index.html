@@ -1,48 +1,22 @@
-<link rel="stylesheet" href="css/styles.css">
-<section class="task-section">
-    <h2>View Tasks</h2>
 
-    <!-- Search -->
-    <div class="task-controls">
-        <input
-            type="text"
-            id="searchInput"
-            placeholder="Search tasks by title..."
-        >
-
-        <!-- Category filter -->
-        <select id="categoryFilter">
-            <option value="">All Categories</option>
-            <option value="School">School</option>
-            <option value="Personal">Personal</option>
-            <option value="Work">Work</option>
-            <option value="Project">Project</option>
-        </select>
-
-        <!-- Priority filter -->
-        <select id="priorityFilter">
-            <option value="">All Priorities</option>
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-        </select>
-
-        <!-- Status filter -->
-        <select id="statusFilter">
-            <option value="">All Statuses</option>
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Task Manager</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Task Manager</title>
+
     <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
 
-    <div class="container">
+    <main class="container">
 
-        <header>
+        <!-- HEADER -->
+        <header class="main-header">
             <div>
                 <h1>Task Manager</h1>
                 <p>Manage your daily tasks in one place.</p>
@@ -53,152 +27,288 @@
             </button>
         </header>
 
-        <!-- Existing Tasks Section -->
-        <div class="task-section">
 
-            <h2>My Tasks</h2>
+        <!-- VIEW TASKS -->
+        <section class="task-section">
 
-            <div id="empty-state">
-                <h3>No tasks yet</h3>
-                <p>Click the Add Task button to create your first task.</p>
+            <div class="section-heading">
+                <div>
+                    <h2>My Tasks</h2>
+                    <p class="section-description">
+                        View and manage all your tasks.
+                    </p>
+                </div>
             </div>
 
-            <!-- Member 2's READ feature will display tasks here -->
-            <div id="task-list"></div>
+            <!-- SEARCH AND FILTERS -->
+            <div class="task-controls">
 
-        </div>
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search tasks by title..."
+                >
 
-    </div>
+                <select id="categoryFilter">
+                    <option value="">All Categories</option>
+                    <option value="School">School</option>
+                    <option value="Personal">Personal</option>
+                    <option value="Work">Work</option>
+                    <option value="Project">Project</option>
+                </select>
+
+                <select id="priorityFilter">
+                    <option value="">All Priorities</option>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                </select>
+
+                <select id="statusFilter">
+                    <option value="">All Statuses</option>
+                    <option value="Pending">Pending</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Completed">Completed</option>
+                </select>
+
+                <select id="sortOrder">
+                    <option value="">Default Order</option>
+                    <option value="asc">Earliest Deadline</option>
+                    <option value="desc">Latest Deadline</option>
+                </select>
+
+                <button type="button" id="resetFilters" class="reset-button">
+                    Reset Filters
+                </button>
+
+            </div>
+
+            <p id="resultMessage" class="result-message"></p>
+
+            <!-- TASK DISPLAY -->
+            <div id="taskList" class="task-list"></div>
+
+        </section>
 
 
-    <!-- Add Task Popup -->
+        
+        <!-- UPDATE TASK -->
+        <section class="task-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Update Task</h2>
+                    <p class="section-description">
+                        Modify the details of an existing task.
+                    </p>
+                </div>
+            </div>
+
+            <form id="updateTaskForm" class="task-form">
+
+                <div class="form-group">
+                    <label for="updateId">Task ID</label>
+                    <input
+                        type="text"
+                        id="updateId"
+                        placeholder="e.g. Task001"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="updateTitle">Task Title</label>
+                    <input
+                        type="text"
+                        id="updateTitle"
+                        placeholder="Enter task title"
+                        required
+                    >
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="updateDescription">Description</label>
+                    <textarea
+                        id="updateDescription"
+                        placeholder="Enter task description"
+                        required
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="updatePriority">Priority</label>
+                    <select id="updatePriority" required>
+                        <option value="">Select Priority</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="updateStatus">Status</label>
+                    <select id="updateStatus" required>
+                        <option value="">Select Status</option>
+                        <option value="Pending">Pending</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="updateDeadline">Deadline</label>
+                    <input
+                        type="date"
+                        id="updateDeadline"
+                        required
+                    >
+                </div>
+
+                <div class="form-group button-group">
+                    <label>&nbsp;</label>
+
+                    <button
+                        type="button"
+                        class="primary-button"
+                        onclick="updateTask(document.getElementById('updateId').value)"
+                    >
+                        Update Task
+                    </button>
+                </div>
+
+            </form>
+
+            <p id="updateMessage" class="result-message"></p>
+
+        </section>
+
+
+
+        <!-- DELETE TASK -->
+        <section class="task-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Delete Task</h2>
+                    <p class="section-description">
+                        Remove an existing task from your list.
+                    </p>
+                </div>
+            </div>
+
+            <form id="deleteTaskForm" class="delete-form">
+
+                <div class="form-group">
+                    <label for="deleteId">Task ID</label>
+                    <input
+                        type="text"
+                        id="deleteId"
+                        placeholder="e.g. Task001"
+                        required
+                    >
+                </div>
+
+                <div class="form-group button-group">
+                    <label>&nbsp;</label>
+
+                    <button
+                        type="button"
+                        class="danger-button"
+                        onclick="deleteTask(document.getElementById('deleteId').value)"
+                    >
+                        Delete Task
+                    </button>
+                </div>
+
+            </form>
+
+            <p id="deleteMessage" class="result-message"></p>
+
+        </section>
+
+    </main>
+
+
+    <!-- ADD TASK POPUP -->
     <div id="taskModal" class="modal">
 
         <div class="modal-content">
 
             <div class="modal-header">
-                <h2>Add New Task</h2>
+                <div>
+                    <h2>Add New Task</h2>
+                    <p>Create a new task for your list.</p>
+                </div>
 
-                <button class="close-button" onclick="closeTaskForm()">
+                <button
+                    class="close-button"
+                    onclick="closeTaskForm()"
+                    type="button"
+                >
                     &times;
                 </button>
             </div>
 
-            <label for="title">Task Title</label>
-            <input type="text" id="title" placeholder="Enter task title">
+            <div class="form-group">
+                <label for="title">Task Title</label>
+                <input
+                    type="text"
+                    id="title"
+                    placeholder="Enter task title"
+                >
+            </div>
 
-            <label for="description">Description</label>
-            <textarea id="description" placeholder="Enter task description"></textarea>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea
+                    id="description"
+                    placeholder="Enter task description"
+                ></textarea>
+            </div>
 
-            <label for="priority">Priority</label>
-            <select id="priority">
-                <option value="">Select priority</option>
-                <option value="Low">Low</option>
-                <option value="Medium">Medium</option>
-                <option value="High">High</option>
-            </select>
+            <div class="form-group">
+                <label for="priority">Priority</label>
+                <select id="priority">
+                    <option value="">Select Priority</option>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                </select>
+            </div>
 
-            <label for="deadline">Deadline</label>
-            <input type="date" id="deadline">
+            <div class="form-group">
+                <label for="deadline">Deadline</label>
+                <input type="date" id="deadline">
+            </div>
 
             <div class="form-buttons">
-                <button class="cancel-button" onclick="closeTaskForm()">
+
+                <button
+                    class="cancel-button"
+                    onclick="closeTaskForm()"
+                    type="button"
+                >
                     Cancel
                 </button>
 
-                <button class="submit-button" onclick="addTask()">
+                <button
+                    class="submit-button"
+                    onclick="addTask()"
+                    type="button"
+                >
                     Add Task
                 </button>
+
             </div>
 
         </div>
 
     </div>
 
+
+    <!-- JAVASCRIPT FILES -->
     <script src="js/add-task.js"></script>
-    <h1>Welcome to Task Manager</h1>
-    <p>Manage your daily tasks in one place.</p>
-
-    <hr>
-
-    <!-- Update Task Section -->
-    <h2>Update Task</h2>
-
-    <form id="updateTaskForm">
-
-        <label for="updateId">Task ID:</label>
-        <input type="number" id="updateId" min="1" required>
-
-        <label for="title">Task Title:</label>
-        <input type="text" id="title" required>
-
-        <label for="description">Description:</label>
-        <textarea id="description" required></textarea>
-
-        <label for="priority">Priority:</label>
-        <select id="priority" required>
-            <option value="">Select Priority</option>
-            <option value="High">High</option>
-            <option value="Medium">Medium</option>
-            <option value="Low">Low</option>
-        </select>
-
-        <label for="status">Status:</label>
-        <select id="status" required>
-            <option value="">Select Status</option>
-            <option value="Pending">Pending</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Completed">Completed</option>
-        </select>
-
-        <!-- Sorting -->
-        <select id="sortOrder">
-            <option value="">Default Order</option>
-            <option value="asc">Deadline: Earliest First</option>
-            <option value="desc">Deadline: Latest First</option>
-        </select>
-    </div>
-
-    <button id="resetFilters">Reset Filters</button>
-
-    <!-- Results message -->
-    <p id="resultMessage"></p>
-
-    <!-- Task display -->
-    <div id="taskList" class="task-list"></div>
-</section>
-
-<script src="js/read-task.js"></script>
-        <label for="deadline">Deadline:</label>
-        <input type="date" id="deadline" required>
-
-        <button type="button" onclick="updateTask(document.getElementById('updateId').value)">
-            Update Task
-        </button>
-
-    </form>
-
-    <p id="updateMessage"></p>
-
-    <hr>
-
-    <!-- Delete Task Section -->
-    <h2>Delete Task</h2>
-
-    <form id="deleteTaskForm">
-
-        <label for="deleteId">Task ID:</label>
-        <input type="number" id="deleteId" min="1" required>
-
-        <button type="button" onclick="deleteTask(document.getElementById('deleteId').value)">
-            Delete Task
-        </button>
-
-    </form>
-
-    <p id="deleteMessage"></p>
-
-    <!-- JavaScript Files -->
+    <script src="js/read-task.js"></script>
     <script src="js/update-task.js"></script>
     <script src="js/delete-task.js"></script>
 
