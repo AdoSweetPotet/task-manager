@@ -1,3 +1,4 @@
+
 {
   "tasks": [
     {
@@ -13,7 +14,7 @@
       "id": "Task003",
       "title": "balls",
       "description": "balls",
-      "category": "",
+      "category": "School",
       "priority": "High",
       "status": "Pending",
       "deadline": "2026-11-24"
