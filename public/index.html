@@ -1,15 +1,89 @@
-
 <!DOCTYPE html>
 <html>
 <head>
     <title>Task Manager</title>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
 
-    <h1>Welcome to Task Manager</h1>
+    <div class="container">
 
-    <p>Manage your daily tasks in one place.</p>
+        <header>
+            <div>
+                <h1>Task Manager</h1>
+                <p>Manage your daily tasks in one place.</p>
+            </div>
+
+            <button class="add-button" onclick="openTaskForm()">
+                + Add Task
+            </button>
+        </header>
+
+        <!-- Existing Tasks Section -->
+        <div class="task-section">
+
+            <h2>My Tasks</h2>
+
+            <div id="empty-state">
+                <h3>No tasks yet</h3>
+                <p>Click the Add Task button to create your first task.</p>
+            </div>
+
+            <!-- Member 2's READ feature will display tasks here -->
+            <div id="task-list"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Add Task Popup -->
+    <div id="taskModal" class="modal">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h2>Add New Task</h2>
+
+                <button class="close-button" onclick="closeTaskForm()">
+                    &times;
+                </button>
+            </div>
+
+            <label for="title">Task Title</label>
+            <input type="text" id="title" placeholder="Enter task title">
+
+            <label for="description">Description</label>
+            <textarea id="description" placeholder="Enter task description"></textarea>
+
+            <label for="priority">Priority</label>
+            <select id="priority">
+                <option value="">Select priority</option>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+            </select>
+
+            <label for="deadline">Deadline</label>
+            <input type="date" id="deadline">
+
+            <div class="form-buttons">
+                <button class="cancel-button" onclick="closeTaskForm()">
+                    Cancel
+                </button>
+
+                <button class="submit-button" onclick="addTask()">
+                    Add Task
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="js/add-task.js"></script>
 
 </body>
 </html>
