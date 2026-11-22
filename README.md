@@ -1,4 +1,4 @@
-- A little overview of update-delete branch -
+A little overview of update-delete branch -
 A web-based Task Manager application that allows users to manage their daily tasks.
 
 1. update task
