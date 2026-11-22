@@ -1,15 +1,19 @@
-
 const express = require('express');
 const app = express();
+
+const { getTasks } = require('./utils/ReadTaskUtil');
+const { updateTask } = require('./utils/UpdateTaskUtil');
+const { deleteTask } = require('./utils/DeleteTaskUtil');
 
 const PORT = 3000;
 
 app.use(express.json());
 app.use(express.static('public'));
 
-// Import task functions
-const { updateTask } = require('./utils/UpdateTaskUtil');
-const { deleteTask } = require('./utils/DeleteTaskUtil');
+// Display the main page
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/public/index.html');
+});
 
 // Update Task route
 app.put('/update-task/:id', updateTask);
@@ -17,8 +21,24 @@ app.put('/update-task/:id', updateTask);
 // Delete Task route
 app.delete('/delete-task/:id', deleteTask);
 
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/index.html');
+// Read tasks
+app.get('/api/tasks', (req, res) => {
+    try {
+        const tasks = getTasks(req.query);
+
+        res.status(200).json({
+            success: true,
+            count: tasks.length,
+            tasks: tasks
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(error.statusCode || 500).json({
+            success: false,
+            message: error.message
+        });
+    }
 });
 
 app.listen(PORT, () => {

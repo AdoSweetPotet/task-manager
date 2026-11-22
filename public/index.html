@@ -1,4 +1,35 @@
+<link rel="stylesheet" href="css/styles.css">
+<section class="task-section">
+    <h2>View Tasks</h2>
 
+    <!-- Search -->
+    <div class="task-controls">
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search tasks by title..."
+        >
+
+        <!-- Category filter -->
+        <select id="categoryFilter">
+            <option value="">All Categories</option>
+            <option value="School">School</option>
+            <option value="Personal">Personal</option>
+            <option value="Work">Work</option>
+            <option value="Project">Project</option>
+        </select>
+
+        <!-- Priority filter -->
+        <select id="priorityFilter">
+            <option value="">All Priorities</option>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+        </select>
+
+        <!-- Status filter -->
+        <select id="statusFilter">
+            <option value="">All Statuses</option>
 <!DOCTYPE html>
 <html>
 <head>
@@ -43,6 +74,24 @@
             <option value="Completed">Completed</option>
         </select>
 
+        <!-- Sorting -->
+        <select id="sortOrder">
+            <option value="">Default Order</option>
+            <option value="asc">Deadline: Earliest First</option>
+            <option value="desc">Deadline: Latest First</option>
+        </select>
+    </div>
+
+    <button id="resetFilters">Reset Filters</button>
+
+    <!-- Results message -->
+    <p id="resultMessage"></p>
+
+    <!-- Task display -->
+    <div id="taskList" class="task-list"></div>
+</section>
+
+<script src="js/read-task.js"></script>
         <label for="deadline">Deadline:</label>
         <input type="date" id="deadline" required>
 
